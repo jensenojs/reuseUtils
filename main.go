@@ -61,15 +61,11 @@ func main() {
 			return err
 		}
 
-		if info.IsDir() {
+		if info.IsDir() || filepath.Ext(path) != ".go" {
 			return nil
 		}
 
-		if filepath.Ext(path) != ".go" {
-			return nil
-		}
-
-		// 分析Go文件
+		// Parse the Go source file.
 		fset := token.NewFileSet()
 		node, err := parser.ParseFile(fset, path, nil, parser.ParseComments)
 		if err != nil {
