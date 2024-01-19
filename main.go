@@ -22,22 +22,22 @@ const (
 	InValid = iota
 	GenCreatePool
 	GenTypeName
-	GenRelease
+	GenReset
 )
 
 // 请手动指定
-var genType = GenCreatePool
+var genType = GenTypeName
 
 func main() {
-	var generate func(string) string
+	var generate func(*ast.StructType, string) string
 
 	switch genType {
 	case GenCreatePool:
 		generate = reuseutils.GenerateCreatePool
 	case GenTypeName:
 		generate = reuseutils.GenerateTypeName
-	// case GenCreatePool:
-	// 	generate = reuseutils.GenerateCreatePool	case GenCreatePool:
+	case GenReset:
+		generate = reuseutils.GenerateReset
 	default:
 		fmt.Println("Please specify the type of code to generate.")
 		os.Exit(1)
@@ -73,16 +73,20 @@ func main() {
 		}
 
 		var structNames []string
+		var structTypes []*ast.StructType
 		ast.Inspect(node, func(n ast.Node) bool {
-			// 查找结构体定义
-			typeSpec, ok := n.(*ast.TypeSpec)
-			if !ok {
-				return true
-			}
-
-			_, ok = typeSpec.Type.(*ast.StructType)
-			if ok {
-				structNames = append(structNames, typeSpec.Name.Name)
+			if typeSpec, isTypeSpec := n.(*ast.TypeSpec); isTypeSpec {
+				if structType, isStruct := typeSpec.Type.(*ast.StructType); isStruct {
+					if reuseutils.HasFormatMethod(node, typeSpec.Name.Name) {
+						// GenTypeName and CreatePool only need structName
+						structNames = append(structNames, typeSpec.Name.Name)
+						switch genType {
+						case GenReset:
+							// 如果存在Format方法，则生成reset方法
+							structTypes = append(structTypes, structType)
+						}
+					}
+				}
 			}
 			return true
 		})
@@ -96,8 +100,16 @@ func main() {
 		defer dstFile.Close()
 
 		// 写入生成的代码
-		for _, structName := range structNames {
-			code := generate(structName)
+		for i, structName := range structNames {
+			var code string
+
+			switch genType {
+			case GenReset:
+				code = generate(structTypes[i], structName)
+			default:
+				code = generate(nil, structName)
+			}
+
 			_, err = dstFile.WriteString(code)
 			if err != nil {
 				return err

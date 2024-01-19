@@ -18,8 +18,8 @@ func getElementType(expr ast.Expr) (string, bool) {
 	}
 }
 
-// GenerateResetFunc 生成结构体的 reset 方法
-func GenerateResetFunc(structType *ast.StructType, structName string) string {
+// GenerateReset 生成结构体的 reset 方法
+func GenerateReset(structType *ast.StructType, structName string) string {
 	var builder strings.Builder
 	builder.WriteString("\nfunc (node *" + structName + ") reset() {\n")
 
@@ -65,8 +65,8 @@ func GenerateResetFunc(structType *ast.StructType, structName string) string {
 	return builder.String()
 }
 
-// hasFormatMethod 检查类型是否有 Format 方法
-func hasFormatMethod(file *ast.File, structName string) bool {
+// HasFormatMethod 检查类型是否有 Format 方法
+func HasFormatMethod(file *ast.File, structName string) bool {
 	for _, decl := range file.Decls {
 		if funcDecl, ok := decl.(*ast.FuncDecl); ok {
 			// 检查函数是方法，有接收者，并且接收者类型与我们的结构体名称匹配

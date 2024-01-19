@@ -1,12 +1,13 @@
 package reuseutils
 
 import (
+	"go/ast"
 	"strings"
 )
 
 const PackageName = "tree"
 
-func GenerateTypeName(structName string) string {
+func GenerateTypeName(_ *ast.StructType, structName string) string {
 	var builder strings.Builder
 	builder.WriteString("func (node " + structName + ") TypeName() string {")
 	builder.WriteString(" return \"" + PackageName + "." + structName + "\"}\n")

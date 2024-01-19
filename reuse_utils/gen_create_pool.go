@@ -1,11 +1,12 @@
 package reuseutils
 
 import (
+	"go/ast"
 	"strings"
 )
 
 // GenerateCreatePool 生成一个结构体使用示例代码
-func GenerateCreatePool(structName string) string {
+func GenerateCreatePool(_ *ast.StructType, structName string) string {
 	var builder strings.Builder
 
 	firstChar := strings.ToLower(string(structName[0]))
