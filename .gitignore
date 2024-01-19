@@ -1,0 +1,5 @@
+.idea/
+.vscode/
+generate/
+.vscode
+**/.DS_Store
