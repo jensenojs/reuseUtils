@@ -13,7 +13,7 @@ func GenerateCreatePool(_ *ast.StructType, structName string) string {
 
 	builder.WriteString("\treuse.CreatePool[" + structName + "](\n")
 	builder.WriteString("\t\tfunc() *" + structName + " { return &" + structName + "{} },\n")
-	builder.WriteString("\t\tfunc( " + firstChar + " *" + structName + ") { " + firstChar + ".reset() },\n")
+	builder.WriteString("\t\tfunc(" + firstChar + " *" + structName + ") { " + firstChar + ".reset() },\n")
 	// builder.WriteString("\t\tfunc(c *" + structName + ") { *c = " + structName + "{} },\n")
 	builder.WriteString("\t\treuse.DefaultOptions[" + structName + "]().\n")
 	builder.WriteString("\t\t\tWithEnableChecker())\n\n")
