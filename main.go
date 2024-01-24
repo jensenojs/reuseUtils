@@ -21,6 +21,7 @@ const (
 	genCreatePool
 	genTypeName
 	genReset
+	genFree
 	format
 )
 
@@ -41,6 +42,8 @@ func init() {
 		generate = reuseutils.GenerateTypeName
 	case genReset:
 		generate = reuseutils.GenerateReset
+	case genFree:
+		generate = reuseutils.GenerateFree
 	default:
 		fmt.Println("Please specify the type of code to generate.")
 		os.Exit(1)

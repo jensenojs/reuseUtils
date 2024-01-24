@@ -3,3 +3,4 @@
 generate/
 .vscode
 **/.DS_Store
+**/*.txt
