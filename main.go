@@ -15,7 +15,7 @@ import (
 
 // 指定生成的代码类型
 const (
-	srcFolderPath = "/Users/jensen/Projects/matrixorigin/matrixone/pkg/sql/parsers/tree/alter.go" // 设置为包含Go源代码文件的文件夹路径
+	srcFolderPath = "/Users/jensen/Projects/matrixorigin/matrixone/pkg/sql/parsers/tree" // 设置为包含Go源代码文件的文件夹路径
 
 	inValid = iota
 	genCreatePool
@@ -35,20 +35,6 @@ var (
 )
 
 func init() {
-	switch genType {
-	case genCreatePool:
-		generate = reuseutils.GenerateCreatePool
-	case genTypeName:
-		generate = reuseutils.GenerateTypeName
-	case genReset:
-		generate = reuseutils.GenerateReset
-	case genFree:
-		generate = reuseutils.GenerateFree
-	default:
-		fmt.Println("Please specify the type of code to generate.")
-		os.Exit(1)
-	}
-
 	// 获取当前工作目录
 	currentDir, err := os.Getwd()
 	if err != nil {
@@ -56,6 +42,27 @@ func init() {
 		return
 	}
 	dstFolderPath = currentDir + "/" + dstFileName
+
+	switch genType {
+	case genCreatePool:
+		generate = reuseutils.GenerateCreatePool
+		dstFolderPath = dstFolderPath + "_pool"
+	case genTypeName:
+		generate = reuseutils.GenerateTypeName
+		dstFolderPath = dstFolderPath + "_typeName"
+	case genReset:
+		generate = reuseutils.GenerateReset
+		dstFolderPath = dstFolderPath + "_reset"
+	case genFree:
+		generate = reuseutils.GenerateFree
+		dstFolderPath = dstFolderPath + "_free"
+	case format:
+		break
+	default:
+		fmt.Println("Please specify the type of code to generate.")
+		os.Exit(1)
+	}
+
 	err = os.MkdirAll(dstFolderPath, 0o755)
 	if err != nil {
 		fmt.Println("无法创建文件夹：", err)

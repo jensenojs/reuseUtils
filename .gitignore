@@ -1,6 +1,10 @@
 .idea/
 .vscode/
 generate/
+generate_pool/
+generate_typeName/
+generate_reset/
+generate_free/
 .vscode
 **/.DS_Store
 **/*.txt
