@@ -41,7 +41,6 @@ func GenerateReset(structType *ast.StructType, structName string) string {
 			// builder.WriteString("\t\t\treuse.Free[" + eltIdent.Name + "](item, nil)\n")
 			builder.WriteString("\t\t\treuse.Free[" + eltTypeName + "](item, nil)\n")
 			builder.WriteString("\t\t}\n")
-			builder.WriteString("\t}\n")
 
 		} else if starExpr, ok := field.Type.(*ast.StarExpr); ok {
 
@@ -60,6 +59,7 @@ func GenerateReset(structType *ast.StructType, structName string) string {
 		}
 	}
 
+	builder.WriteString("\t*node = " + structName + "{}\n")
 	builder.WriteString("}\n\n")
 
 	return builder.String()

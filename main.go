@@ -1,5 +1,6 @@
 package main
 
+// 用临时变量改写函数参数使其更有可读性
 import (
 	"fmt"
 	"go/ast"
@@ -26,7 +27,7 @@ const (
 )
 
 // 请手动指定
-var genType = inValid
+var genType = genReset
 
 var (
 	dstFileName   = "generate"
